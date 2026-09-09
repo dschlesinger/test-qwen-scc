@@ -1,0 +1,18 @@
+#!/bin/bash -l
+#$ -P <your_project>          # REQUIRED: replace with your SCC project name
+#$ -N qwen_bench
+#$ -l h_rt=01:00:00
+#$ -l gpus=1
+#$ -l gpu_type=L40S
+#$ -pe omp 4
+#$ -j y
+#$ -o qwen_bench.log
+
+module load miniconda
+conda activate qwen-bench     # create first: conda create -n qwen-bench python=3.11
+
+python benchmark.py \
+    --model Qwen/Qwen2.5-3B-Instruct \
+    --max-new-tokens 256 \
+    --warmup-runs 1 \
+    --timed-runs 5
